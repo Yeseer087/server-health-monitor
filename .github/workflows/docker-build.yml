@@ -21,4 +21,4 @@ jobs:
        run: docker run -d --name test-container server-health-monitor
 
      - name: Check container
-       run: docker.ps
+       run: docker.ps -a
