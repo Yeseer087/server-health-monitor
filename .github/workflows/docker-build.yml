@@ -17,3 +17,8 @@ jobs:
      - name: Build Docker image
        run: docker build -t server-health-monitor .
 
+     - name: Run container
+       run: docker run -d --name test-container server-health-monitor
+
+     - name: Check container
+       run: docker.ps
