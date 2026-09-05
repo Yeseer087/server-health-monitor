@@ -33,15 +33,28 @@ def get_network_usage():
 def convert_bytes(bytes_value):
     return bytes_value / (1024 * 1024)
 
-def get_health_status(cpu, memory, disk):
-    highest_usage = max(cpu, memory, disk)
-
-    if highest_usage >= 90:
+def get_status(usage):
+    
+    if usage >= 90:
         return "CRITICAL"
-    elif highest_usage >= 70:
+    elif usage >= 70:
         return "WARNING"
     else:
         return "HEALTHY"
+
+def get_health_status(cpu, memory, disk):
+    cpu_status = get_status(cpu)
+    memory_status = get_status(memory)
+    disk_status = get_status(disk)
+
+    if "CRITICAL" in [cpu_status, memory_status, disk_status]:
+        overall_status = "CRITICAL"
+    elif "WARNING" in [cpu_status, memory_status, disk_status]:
+        overall_status = "WARNING"
+    else:
+        overall_status = "NORMAL"
+
+    return cpu_status, memory_status, disk_status, overall_status
 
 def display_health_report(cpu, memory, disk, sent_mb, received_mb):
     print("===============================")
@@ -68,10 +81,15 @@ def main():
         sent_mb = convert_bytes(bytes_sent)
         received_mb = convert_bytes(bytes_received)
 
-        status = get_health_status(cpu, memory, disk)
+        cpu_status, memory_status, disk_status, status = get_health_status(
+            cpu, memory, disk
+        )
 
         display_health_report(cpu, memory, disk, sent_mb, received_mb)
 
+        print(f"CPU Status: {cpu_status}")
+        print(f"Memory Status: {memory_status}")
+        print(f"Disk Status: {disk_status}")
         print(f"Server Status: {status}")
 
         save_log(

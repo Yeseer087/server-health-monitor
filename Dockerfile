@@ -11,6 +11,6 @@ COPY logger.py .
 
 RUN mkdir -p logs
 
-CMD ["python", "monitor.py"]
+CMD [ "python", "-u", "monitor.py" ]
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 CMD python -c "print('healthy')" || exit 1
