@@ -1,0 +1,86 @@
+
+import psutil
+import time
+from logger import save_log
+
+
+
+print("server Health monitor")
+print("Program started successfully!")
+def get_cpu_usage():
+   return psutil.cpu_percent(interval=1)
+
+
+def get_memory_usage():
+    memory = psutil.virtual_memory()
+    return memory.percent
+
+
+def get_disk_usage():
+    disk = psutil.disk_usage("/")
+    return disk.percent
+
+
+def get_network_usage():
+    network = psutil.net_io_counters()
+
+    bytes_sent = network.bytes_sent
+    bytes_received = network.bytes_recv
+
+    return bytes_sent, bytes_received
+
+
+def convert_bytes(bytes_value):
+    return bytes_value / (1024 * 1024)
+
+def get_health_status(cpu, memory, disk):
+    highest_usage = max(cpu, memory, disk)
+
+    if highest_usage >= 90:
+        return "CRITICAL"
+    elif highest_usage >= 70:
+        return "WARNING"
+    else:
+        return "HEALTHY"
+
+def display_health_report(cpu, memory, disk, sent_mb, received_mb):
+    print("===============================")
+    print("         SERVER HEALTH")
+    print("===============================")
+
+    print(f"CPU Usage: {cpu}%")
+    print(f"Memory Usage: {memory}%")
+    print(f"Disk Usage: {disk}%")
+    print(f"Data Sent: {sent_mb:.2f} MB")
+    print(f"Data Received: {received_mb:.2f} MB")
+
+    print("===============================")
+
+
+def main():
+    while True:
+        cpu = get_cpu_usage()
+        memory = get_memory_usage()
+        disk = get_disk_usage()
+        bytes_sent, bytes_received = get_network_usage()
+
+
+        sent_mb = convert_bytes(bytes_sent)
+        received_mb = convert_bytes(bytes_received)
+
+        status = get_health_status(cpu, memory, disk)
+
+        display_health_report(cpu, memory, disk, sent_mb, received_mb)
+
+        print(f"Server Status: {status}")
+
+        save_log(
+            f"CPU: {cpu}% | Memory: {memory}% | "
+            f"Disk: {disk}% | Status: {status}"
+        )
+
+
+        time.sleep(10)
+if __name__ == "__main__":
+    main()
+
