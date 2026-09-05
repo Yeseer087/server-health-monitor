@@ -26,7 +26,7 @@ jobs:
        run: docker run -d --name test-container server-health-monitor
 
      - name: Check container
-       run:
+       run: |
          sleep 10
          docker ps
          docker logs test-container
