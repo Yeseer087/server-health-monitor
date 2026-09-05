@@ -14,6 +14,11 @@ jobs:
      - name: Checkout code
        uses: actions/checkout@v4
 
+     - name: Test python files
+       run: |
+         python3 -m py_compile monitor.py
+         python3 -m py_compile logger.py
+
      - name: Build Docker image
        run: docker build -t server-health-monitor .
 
