@@ -16,8 +16,10 @@ jobs:
 
      - name: Test python files
        run: |
+         pip3 install -r requirements.txt
          python3 -m py_compile monitor.py
          python3 -m py_compile logger.py
+         pytest -v
 
      - name: Build Docker image
        run: docker build -t server-health-monitor .

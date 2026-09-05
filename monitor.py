@@ -40,7 +40,7 @@ def get_status(usage):
     elif usage >= 70:
         return "WARNING"
     else:
-        return "HEALTHY"
+        return "NORMAL"
 
 def get_health_status(cpu, memory, disk):
     cpu_status = get_status(cpu)
