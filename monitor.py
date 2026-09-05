@@ -93,8 +93,10 @@ def main():
         print(f"Server Status: {status}")
 
         save_log(
-            f"CPU: {cpu}% | Memory: {memory}% | "
-            f"Disk: {disk}% | Status: {status}"
+            f"CPU: {cpu}% ({cpu_status}) | "
+            f"Memory: {memory}% ({memory_status}) | "
+            f"Disk: {disk}% ({disk_status}) | "
+            f"Status: {status}"
         )
 
 
